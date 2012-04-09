@@ -36,28 +36,32 @@ def analyze(name, files):
                 time = parse.parse('{:ti}', t.get('title')).fixed[0]
                 if time:
                     time = time.astimezone(central)
-
-                if YEAR:
-                    if time.year == YEAR: times.append(time)
-                else:
                     times.append(time)
 
-    if len(times) == 0:
+    if not times:
         return
+
+    first_contact = min(times).date()
+
+    if YEAR:
+        times = [t for t in times if t.year == YEAR]
+        first_contact = max(first_contact, date(YEAR, 1, 1))
+
+    if not times:
+        return
+
 
     days = sorted({t.date() for t in times})
     total = len(times)
 
-    span = (days[-1] - days[0]).days
+    span = (days[-1] - first_contact).days
     span = span if span >= 1 else 1
     texts_per_day = (total*1.0)/span
 
     if not YEAR or date(YEAR, 12, 31) > datetime.now().date():
-        avg_span = (datetime.now().date() - days[0]).days
-    elif YEAR and days[0] > date(YEAR, 1, 1):
-        avg_span = (date(YEAR,12,31) - days[0]).days
+        avg_span = (datetime.now().date() - first_contact).days
     elif YEAR:
-        avg_span = (date(YEAR,12, 31) - date(YEAR,1,1)).days
+        avg_span = (date(YEAR,12,31) - first_contact).days
 
     avg_span = avg_span if avg_span >= 1 else 1
     avg = (total*1.0) / avg_span
