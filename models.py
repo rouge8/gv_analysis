@@ -11,12 +11,15 @@ class Contact(BaseModel):
     name = peewee.CharField(unique=True, db_index=True)
 
     def __unicode__(self):
-        return u'%s at %s' % (self.name, self.phone)
+        return unicode(self.name)
 
 
 class Phone(BaseModel):
     phone = peewee.CharField(unique=True, db_index=True)
     contact = peewee.ForeignKeyField(Contact, related_name='phones')
+
+    def __unicode__(self):
+        return unicode(self.phone)
 
 
 class SMS(BaseModel):
@@ -27,4 +30,4 @@ class SMS(BaseModel):
     phone = peewee.ForeignKeyField(Phone, related_name='messages')
 
     def __unicode__(self):
-        return u'%s on ' % (self.phone) + unicode(self.time)
+        return u'%s at ' % (self.phone) + unicode(self.time)
