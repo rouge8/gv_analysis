@@ -38,10 +38,7 @@ class NaiveBayes(object):
         for c in self.priors:
             score[c] = math.log(self.priors[c])
             for w in words:
-                try:
-                    score[c] += math.log(self.get_condprob(w, c))
-                except KeyError:
-                    print 'FUCKING KeyError:', w, c
+                score[c] += math.log(self.get_condprob(w, c))
 
         return max(score.iteritems(), key=operator.itemgetter(1))[0]
 
@@ -121,6 +118,13 @@ def run_naive_bayes(train, test):
     classifier = build_classifier(train)
     run_test(classifier, test)
 
+def interactive(classifier):
+    while True:
+        print 'CLASSIFY YOUR MESSAGE:'
+        text = raw_input('enter a text: ').strip().split()
+        print 'result:', classifier.classify(text)
+        print
+
 if __name__ == '__main__':
     database.connect()
     train, test = split_me_not_me(0.9)
@@ -134,12 +138,8 @@ if __name__ == '__main__':
     run_naive_bayes(*people_with_many_texts(threshold))
 
     train, test = split_me_not_me(1.0)
+    #train, test = people_with_many_texts(200)
     classifier = build_classifier(train)
-    while True:
-        print
-        print 'CLASSIFY SOME SHIT:'
-        text = raw_input('enter a text: ').strip().split()
-        print classifier.classify(text)
-
+    interactive(classifier)
 
     database.close()
