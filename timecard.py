@@ -10,6 +10,7 @@ import codecs
 
 YEAR = None
 
+
 def get_names(files):
     names = []
     for f in files:
@@ -112,7 +113,7 @@ def main():
 
     # averages
     print 'TOP TEN TEXTERS ON DAILY AVERAGES:'
-    avgs = [(i.name, round(i.avgday,2)) for i in sorted(message_counts, key=lambda k: k.avgday, reverse=True) if i.avgday > 0 and i.avgday != i.count]
+    avgs = [(i.name, round(i.avgday, 2)) for i in sorted(message_counts, key=lambda k: k.avgday, reverse=True) if i.avgday > 0 and i.avgday != i.count]
     for i in range(len(avgs)):
     #for i in range(10):
         print '%d.' %(i+1), avgs[i][0], avgs[i][1]
@@ -121,10 +122,10 @@ def main():
 
     # actual averages
     print 'TOP TEXTERS FOR ACTUAL AVERAGES SINCE FIRST TEXT:'
-    actual_avgs =  [(i.name, round(i.avg,2)) for i in sorted(message_counts, key=lambda k: k.avg, reverse=True) if i.count > 0 and i.count != i.avg ]#and i.avg > 1]
+    actual_avgs =  [(i.name, round(i.avg, 2)) for i in sorted(message_counts, key=lambda k: k.avg, reverse=True) if i.count > 0 and i.count != i.avg ]#and i.avg > 1]
 
     for i, a in enumerate(actual_avgs):
-        print '%d.' %(i+1), a[0], a[1]
+        print '%d.' % (i+1), a[0], a[1]
 
 
 
