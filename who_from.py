@@ -123,11 +123,14 @@ def run_naive_bayes(train, test):
     run_test(classifier, test)
 
 def interactive(classifier):
-    while True:
-        print 'CLASSIFY YOUR MESSAGE:'
-        text = raw_input('enter a text: ').strip().split()
-        print 'result:', classifier.classify(text)
-        print
+    try:
+        while True:
+            print 'CLASSIFY YOUR MESSAGE:'
+            text = raw_input('enter a text: ')
+            print 'result:', classifier.classify(tokenize(text))
+            print
+    except KeyboardInterrupt:
+        database.close()
 
 if __name__ == '__main__':
     database.connect()
