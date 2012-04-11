@@ -88,14 +88,18 @@ def people_with_many_texts(n):
 
     return train, test
 
+def tokenize(words):
+    return words.strip().split()
+
 def build_classifier(train):
     n = NaiveBayes()
     for klass in train:
         for sms in train[klass]:
-            n.addExample(klass, sms.text.strip().split())
+            n.addExample(klass, tokenize(sms.text))
 
     n.calculate_probs()
-    print 'PRIORS ARE', n.priors
+    #print 'PRIORS ARE', n.priors
+    #print 'EXPECTED ACCURACY:',
     return n
 
 def run_test(classifier, test):
@@ -103,7 +107,7 @@ def run_test(classifier, test):
     incorrect = 0
     for klass in test:
         for sms in test[klass]:
-            classification = classifier.classify(sms.text.strip().split())
+            classification = classifier.classify(tokenize(sms.text))
             if classification == klass:
                 correct += 1
             else:
@@ -136,6 +140,7 @@ if __name__ == '__main__':
     print
     print 'PEOPLE WITH OVER %d TEXTS:' % threshold
     run_naive_bayes(*people_with_many_texts(threshold))
+    print
 
     train, test = split_me_not_me(1.0)
     #train, test = people_with_many_texts(200)
