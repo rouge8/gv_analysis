@@ -2,8 +2,10 @@ import random
 import math
 import operator
 from collections import Counter, defaultdict
+import twokenize
 import peewee
 from models import database, SMS, Contact
+
 
 class NaiveBayes(object):
     def __init__(self):
@@ -17,8 +19,7 @@ class NaiveBayes(object):
 
     def calculate_probs(self):
         for c in self.doccounts:
-            self.priors[c] = (1.0* self.doccounts[c]) / sum(self.doccounts.values())
-
+            self.priors[c] = (1.0 * self.doccounts[c]) / sum(self.doccounts.values())
 
     def get_condprob(self, word, class_):
         if not self._condprobs[word].get(class_):
@@ -27,7 +28,6 @@ class NaiveBayes(object):
             self._condprobs[word][class_] = num / denom
 
         return self._condprobs[word][class_]
-
 
     def classify(self, words):
         if not self.priors:
@@ -41,7 +41,6 @@ class NaiveBayes(object):
                 score[c] += math.log(self.get_condprob(w, c))
 
         return max(score.iteritems(), key=operator.itemgetter(1))[0]
-
 
     def addExample(self, klass, words):
         self.doccounts[klass] += 1
@@ -59,10 +58,10 @@ def split_me_not_me(TRAIN_SIZE):
     not_me = set(not_me)
     me = set(me)
 
-    train['me'] = set(random.sample(me, int(TRAIN_SIZE*len(me))))
+    train['me'] = set(random.sample(me, int(TRAIN_SIZE * len(me))))
     test['me'] = me - train['me']
 
-    train['not_me'] = set(random.sample(not_me, int(TRAIN_SIZE*len(not_me))))
+    train['not_me'] = set(random.sample(not_me, int(TRAIN_SIZE * len(not_me))))
     test['not_me'] = not_me - train['not_me']
 
     return train, test
@@ -84,12 +83,12 @@ def people_with_many_texts(n):
         train[c] = set(random.sample(data[c], int(TRAIN * len(data[c]))))
         test[c] = data[c] - train[c]
 
-    print 'There are %d people with >= %d texts.' %(len(data), n)
+    print 'There are %d people with >= %d texts.' % (len(data), n)
 
     return train, test
 
 def tokenize(words):
-    return words.strip().split()
+    return twokenize.tokenize(words)
 
 def build_classifier(train):
     n = NaiveBayes()
@@ -113,8 +112,8 @@ def run_test(classifier, test):
             else:
                 incorrect += 1
 
-    accuracy = correct/float(correct+incorrect)
-    print 'Classified %d correctly and %d incorrectly for an accuracy of %f.' %(correct, incorrect, accuracy)
+    accuracy = correct / float(correct + incorrect)
+    print 'Classified %d correctly and %d incorrectly for an accuracy of %f.' % (correct, incorrect, accuracy)
 
     return accuracy
 
