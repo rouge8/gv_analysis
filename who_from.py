@@ -66,7 +66,8 @@ def split_me_not_me(TRAIN_SIZE):
 
     return train, test
 
-def people_with_many_texts(n):
+def people_with_many_texts(n, TRAIN=0.9):
+    # TRAIN = percent of data to have in training set
     contacts = peewee.RawQuery(Contact, '''SELECT * from sms, contact
     where from_me=0 and contact.id=contact_id GROUP BY contact_id
     HAVING count(*) >= ?;''', n)
@@ -75,7 +76,6 @@ def people_with_many_texts(n):
     for c in contacts:
         data[c.name] = set(SMS.select().where(contact=c))
 
-    TRAIN = 0.9
     train = {}
     test = {}
 
@@ -145,7 +145,7 @@ if __name__ == '__main__':
     print
 
     train, test = split_me_not_me(1.0)
-    #train, test = people_with_many_texts(200)
+    train, test = people_with_many_texts(threshold)
     classifier = build_classifier(train)
     interactive(classifier)
 
