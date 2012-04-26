@@ -55,7 +55,7 @@ def split_set(s, SIZE):
 
     return a, b
 
-def split_me_not_me(TRAIN_SIZE):
+def split_me_not_me(TRAIN_SIZE=0.9):
     train, test = {}, {}
 
     not_me = SMS.select().where(from_me=False)
