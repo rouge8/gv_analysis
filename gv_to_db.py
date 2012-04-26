@@ -1,5 +1,5 @@
 import os
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 from HTMLParser import HTMLParser
 import parse
 from models import database, Contact, Phone, SMS, settings

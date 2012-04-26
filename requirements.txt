@@ -1,4 +1,4 @@
-BeautifulSoup==3.2.0
+beautifulsoup4==4.0.3
 parse==1.4
 peewee==0.9.4
 pytz==2011n
