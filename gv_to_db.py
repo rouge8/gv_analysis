@@ -2,11 +2,11 @@ import os
 from BeautifulSoup import BeautifulSoup
 from HTMLParser import HTMLParser
 import parse
-from models import database, Contact, Phone, SMS
+from models import database, Contact, Phone, SMS, settings
 
 def gv_to_db(me):
-    files = os.listdir('conversations')
-    os.chdir('conversations')
+    files = os.listdir(settings.CONVERSATIONS_DIR)
+    os.chdir(settings.CONVERSATIONS_DIR)
     files = [f for f in files if f.endswith('html')]
 
     database.set_autocommit(False)
@@ -64,8 +64,8 @@ if __name__ == '__main__':
         SMS.create_table()
         Phone.create_table()
 
-    me = Contact.get_or_create(name='Andy Freeland')
-    p = Phone.get_or_create(phone='18155017832', contact=me)
+    me = Contact.get_or_create(name=settings.OWNER_NAME)
+    p = Phone.get_or_create(phone=settings.OWNER_PHONE, contact=me)
     me.save()
     p.save()
 

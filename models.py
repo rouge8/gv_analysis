@@ -1,6 +1,11 @@
 import peewee
+try:
+    import settings
+except ImportError:
+    import sys
+    print >> sys.stderr, 'ERROR: settings.py missing.'
 
-database = peewee.SqliteDatabase('gv.db')
+database = peewee.SqliteDatabase(settings.DATABASE)
 
 class BaseModel(peewee.Model):
     class Meta:
