@@ -11,11 +11,13 @@ Usage
 
 0. [Download](https://www.google.com/takeout/?pli=1#custom:voice) and extract your Google Voice data.
 
-1. Copy `settings_example.py` to `settings.py` and configure appropriately.
+1. Install the dependencies with something like `pip install -r requirements.txt`.
 
-2. Run `gv_to_db.py` to load everything into a SQLite database.
+2. Copy `settings_example.py` to `settings.py` and configure appropriately.
 
-3. Run `who_from.py` to run a few simple analyzers using Naive Bayes.
+3. Run `gv_to_db.py` to load everything into a SQLite database.
+
+4. Run `who_from.py` to run a few simple analyzers using Naive Bayes.
 
 Classifiers
 ---------
