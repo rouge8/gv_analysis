@@ -67,6 +67,18 @@ def split_me_not_me(TRAIN_SIZE):
     train['me'], test['me'] = split_set(me, TRAIN_SIZE)
     train['not_me'], test['not_me'] = split_set(not_me, TRAIN_SIZE)
 
+    return train, test
+
+def recipient_is(name, TRAIN=0.9):
+    #: TRAIN = percent of the data to have in training set
+    train = {}
+    test = {}
+    person = Contact.get(name=name)
+    recipient = set(SMS.select().where(contact=person).where(from_me=False))
+    not_recipient = set(SMS.select().where(contact__ne=person).where(from_me=False))
+
+    train[person.name], test[person.name] = split_set(recipient, TRAIN)
+    train['not_'+person.name], test['not_'+person.name] = split_set(not_recipient, TRAIN)
 
     return train, test
 
