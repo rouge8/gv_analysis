@@ -49,6 +49,12 @@ class NaiveBayes(object):
         self.wordcounts[klass].update(words)
 
 
+def split_set(s, SIZE):
+    a = set(random.sample(s, int(SIZE * len(s))))
+    b = s - a
+
+    return a, b
+
 def split_me_not_me(TRAIN_SIZE):
     train, test = {}, {}
 
@@ -58,11 +64,9 @@ def split_me_not_me(TRAIN_SIZE):
     not_me = set(not_me)
     me = set(me)
 
-    train['me'] = set(random.sample(me, int(TRAIN_SIZE * len(me))))
-    test['me'] = me - train['me']
+    train['me'], test['me'] = split_set(me, TRAIN_SIZE)
+    train['not_me'], test['not_me'] = split_set(not_me, TRAIN_SIZE)
 
-    train['not_me'] = set(random.sample(not_me, int(TRAIN_SIZE * len(not_me))))
-    test['not_me'] = not_me - train['not_me']
 
     return train, test
 
@@ -80,8 +84,7 @@ def people_with_many_texts(n, TRAIN=0.9):
     test = {}
 
     for c in data:
-        train[c] = set(random.sample(data[c], int(TRAIN * len(data[c]))))
-        test[c] = data[c] - train[c]
+        train[c], test[c] = split_set(data[c], TRAIN)
 
     print 'There are %d people with >= %d texts.' % (len(data), n)
 
@@ -97,8 +100,8 @@ def build_classifier(train):
             n.addExample(klass, tokenize(sms.text))
 
     n.calculate_probs()
-    #print 'PRIORS ARE', n.priors
-    #print 'EXPECTED ACCURACY:',
+    # print 'PRIORS ARE', n.priors
+    print 'EXPECTED ACCURACY:', max(n.priors.values())
     return n
 
 def run_test(classifier, test):
@@ -146,7 +149,7 @@ if __name__ == '__main__':
 
     train, test = split_me_not_me(1.0)
     train, test = people_with_many_texts(threshold)
-    classifier = build_classifier(train)
-    interactive(classifier)
+    # classifier = build_classifier(train)
+    # interactive(classifier)
 
     database.close()
