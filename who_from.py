@@ -42,7 +42,7 @@ class NaiveBayes(object):
 
         return max(score.iteritems(), key=operator.itemgetter(1))[0]
 
-    def addExample(self, klass, words):
+    def add_example(self, klass, words):
         self.doccounts[klass] += 1
         self.vocab.update(words)
         self.classcounts[klass] += len(words)
@@ -109,7 +109,7 @@ def build_classifier(train):
     n = NaiveBayes()
     for klass in train:
         for sms in train[klass]:
-            n.addExample(klass, tokenize(sms.text))
+            n.add_example(klass, tokenize(sms.text))
 
     n.calculate_probs()
     # print 'PRIORS ARE', n.priors
@@ -159,8 +159,8 @@ if __name__ == '__main__':
     run_naive_bayes(*people_with_many_texts(threshold))
     print
 
-    train, test = split_me_not_me(1.0)
-    train, test = people_with_many_texts(threshold)
+    # train, test = split_me_not_me(1.0)
+    # train, test = people_with_many_texts(threshold)
     # classifier = build_classifier(train)
     # interactive(classifier)
 
