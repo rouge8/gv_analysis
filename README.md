@@ -3,13 +3,13 @@ Google Voice Analysis
 
 A collection of scripts to parse and analyze exported Google Voice data.
 
-So far it just parses the data and runs a few [Naive Bayes classifiers](http://en.wikipedia.org/wiki/Naive_Bayes_classifier), but
+So far it just parses the data and runs a few [Naive Bayes classifiers][1], but
 I'm looking to expand.
 
 Usage
 -----
 
-0. [Download](https://www.google.com/takeout/?pli=1#custom:voice) and extract your Google Voice data.
+0. [Download][2] and extract your Google Voice data.
 
 1. Install the dependencies with something like `pip install -r requirements.txt`.
 
@@ -45,3 +45,7 @@ License
 MIT/X11 licensed, except for `emoticons.py` and `twokenize.py`.
 
 `emoticons.py` and `twokenize.py` are copyright Brendan O'Connor, Michel Krieger, and David Ahn and licensed under the Apache License 2.0.
+
+
+[1]: http://en.wikipedia.org/wiki/Naive_Bayes_classifier
+[2]: https://www.google.com/takeout/?pli=1#custom:voice
