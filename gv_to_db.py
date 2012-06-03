@@ -65,9 +65,10 @@ if __name__ == '__main__':
         Phone.create_table()
 
     me = Contact.get_or_create(name=settings.OWNER_NAME)
-    p = Phone.get_or_create(phone=settings.OWNER_PHONE, contact=me)
     me.save()
-    p.save()
+    for phone in settings.OWNER_PHONES:
+        p = Phone.get_or_create(phone=phone, contact=me)
+        p.save()
 
     gv_to_db(me)
     database.close()
