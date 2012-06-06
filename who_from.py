@@ -19,12 +19,14 @@ class NaiveBayes(object):
 
     def calculate_probs(self):
         for c in self.doccounts:
-            self.priors[c] = (1.0 * self.doccounts[c]) / sum(self.doccounts.values())
+            self.priors[c] = (1.0 * self.doccounts[c]) / \
+                              sum(self.doccounts.values())
 
     def get_condprob(self, word, class_):
         if not self._condprobs[word].get(class_):
             num = self.wordcounts[class_].get(word, 0) + 1.0
-            denom = len(self.vocab) + 1.0 + sum(self.wordcounts[class_].values())
+            denom = len(self.vocab) + 1.0 + \
+                    sum(self.wordcounts[class_].values())
             self._condprobs[word][class_] = num / denom
 
         return self._condprobs[word][class_]
@@ -55,6 +57,7 @@ def split_set(s, SIZE):
 
     return a, b
 
+
 def split_me_not_me(TRAIN_SIZE=0.9):
     train, test = {}, {}
 
@@ -69,18 +72,22 @@ def split_me_not_me(TRAIN_SIZE=0.9):
 
     return train, test
 
+
 def recipient_is(name, TRAIN=0.9):
     #: TRAIN = percent of the data to have in training set
     train = {}
     test = {}
     person = Contact.get(name=name)
     recipient = set(SMS.select().where(contact=person).where(from_me=False))
-    not_recipient = set(SMS.select().where(contact__ne=person).where(from_me=False))
+    not_recipient = set(SMS.select().where(contact__ne=person)
+                        .where(from_me=False))
 
     train[person.name], test[person.name] = split_set(recipient, TRAIN)
-    train['not_'+person.name], test['not_'+person.name] = split_set(not_recipient, TRAIN)
+    train['not_' + person.name], test['not_' + person.name] = \
+            split_set(not_recipient, TRAIN)
 
     return train, test
+
 
 def people_with_many_texts(n, TRAIN=0.9):
     # TRAIN = percent of data to have in training set
@@ -102,8 +109,10 @@ def people_with_many_texts(n, TRAIN=0.9):
 
     return train, test
 
+
 def tokenize(words):
     return twokenize.tokenize(words)
+
 
 def build_classifier(train):
     n = NaiveBayes()
@@ -115,6 +124,7 @@ def build_classifier(train):
     # print 'PRIORS ARE', n.priors
     print 'EXPECTED ACCURACY:', max(n.priors.values())
     return n
+
 
 def run_test(classifier, test):
     correct = 0
@@ -128,13 +138,16 @@ def run_test(classifier, test):
                 incorrect += 1
 
     accuracy = correct / float(correct + incorrect)
-    print 'Classified %d correctly and %d incorrectly for an accuracy of %f.' % (correct, incorrect, accuracy)
+    print 'Classified %d correctly and %d incorrectly for an accuracy of %f.' \
+            % (correct, incorrect, accuracy)
 
     return accuracy
+
 
 def run_naive_bayes(train, test):
     classifier = build_classifier(train)
     run_test(classifier, test)
+
 
 def interactive(classifier):
     try:
@@ -145,6 +158,7 @@ def interactive(classifier):
             print
     except KeyboardInterrupt:
         database.close()
+
 
 if __name__ == '__main__':
     database.connect()
